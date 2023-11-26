@@ -1,0 +1,13 @@
+{
+  "name": "svex",
+  "version": "0.1.0",
+  "description": "Svelte Axios Request Handler",
+  "main": "index.js",
+  "repository": "https://github.com/hbourgeot/svex",
+  "author": "['Henrry Bourgeot', 'ndual', 'gracrys']",
+  "license": "MIT",
+  "private": false,
+  "devDependencies": {
+    "typescript": "^5.3.2"
+  }
+}
