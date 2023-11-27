@@ -9,8 +9,14 @@ const path_1 = __importDefault(require("path"));
 const constants_1 = require("./constants");
 function writeDebugConfig() {
     try {
+        // Crear las carpetas si no existen
+        const directory = path_1.default.dirname('.vscode');
+        if (!fs_1.default.existsSync(directory)) {
+            fs_1.default.mkdirSync(directory, { recursive: true });
+            console.log(`Creando directorio ${directory}`);
+        }
         console.log("Writing VSCode debugger config");
-        fs_1.default.writeFileSync('.vscode/launch.json', JSON.stringify(constants_1.vscodeDebugConfig, null, 4));
+        fs_1.default.writeFileSync(".vscode/launch.json", JSON.stringify(constants_1.vscodeDebugConfig, null, 4));
         console.log("✅ VSCode debugger config writed!");
     }
     catch (e) {

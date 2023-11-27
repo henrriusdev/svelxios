@@ -4,8 +4,18 @@ import { vscodeDebugConfig } from "./constants"
 
 export function writeDebugConfig() {
   try {
-    console.log("Writing VSCode debugger config")
-    fs.writeFileSync('.vscode/launch.json', JSON.stringify(vscodeDebugConfig, null, 4));
+    // Crear las carpetas si no existen
+    const directory = path.dirname('.vscode');
+    if (!fs.existsSync(directory)) {
+      fs.mkdirSync(directory, { recursive: true });
+      console.log(`Creando directorio ${directory}`);
+    }
+
+    console.log("Writing VSCode debugger config");
+    fs.writeFileSync(
+      ".vscode/launch.json",
+      JSON.stringify(vscodeDebugConfig, null, 4)
+    );
     console.log("✅ VSCode debugger config writed!");
   } catch (e) {
     console.error(`⚠ Error ocurred! Please open a issue at: https://github.com/hbourgeot/svex`);
