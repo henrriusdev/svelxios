@@ -50,7 +50,7 @@ exports.clientCode = {
   `,
 };
 exports.debuggerCode = `
-export const debbuger = async (
+export const debugger = async (
   name: string,
   payload: any,
   response: Response,
