@@ -91,7 +91,7 @@ exports.debuggerCode = `
     }
   `;
 exports.appLocalsCode = {
-    inLocals: `client: Client`,
+    inLocals: `svelxios: Client`,
     interfaces: `
   interface Response {
     ok: boolean;
