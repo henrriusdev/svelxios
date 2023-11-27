@@ -1,6 +1,6 @@
 {
   "name": "svex",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Svelte Axios Request Handler",
   "main": "index.js",
   "bin": "svex.ts",
@@ -27,6 +27,7 @@
     "typescript": "^5.3.2"
   },
   "dependencies": {
+    "commander": "^11.1.0",
     "ts-node": "^10.9.1"
   }
 }
