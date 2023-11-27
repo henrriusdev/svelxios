@@ -9,9 +9,9 @@ export const vscodeDebugConfig = {
   ],
 };
 
-export const clientCode = [
-  `import {baseUrl} from "$env/static/private`,
-  `
+export const clientCode = {
+  url: `import {baseUrl} from "$env/static/private`,
+  client: `
     export const client = async (event: RequestEvent, endpoint: string, method: string, raw?: object, headers?: any, debug?: boolean) => {
 
   const access_token = await getAccessToken(event)
@@ -49,10 +49,9 @@ export const clientCode = [
 
 }
   `,
-];
+};
 
-export const debuggerCode = [
-  `
+export const debuggerCode = `
     export const debbuger=async (name:string,payload:any, response:Response , endpoint?:string, headers?: any, method?:string)=>{
     try{
       let res = response.clone()
@@ -89,12 +88,11 @@ export const debuggerCode = [
         console.error(method+": "+endpoint +" " ,{error:e, response, status: response.status})
       }
     }
-  `,
-];
+  `;
 
-export const appLocalsCode = [
-  `client: Client`,
-  `
+export const appLocalsCode = {
+  inLocals: `client: Client`,
+  interfaces: `
   interface Response {
     ok: boolean;
     status: number;
@@ -109,10 +107,10 @@ export const appLocalsCode = [
     DELETE: (endpoint: string, body?: object, params?: object, headers?: any) => Promise<Response>;
   }
   `,
-];
+};
 
-export const hooksCode = [
-  `
+export const hooksCode = {
+  handlers: `
   const clientHandler: Handle=async ({event, resolve}) => {
     event.locals.client={
       "GET":async(endpoint:string,body?:object, headers?:any)=>await client(event,endpoint,"GET",body,headers,debug),
@@ -124,5 +122,14 @@ export const hooksCode = [
 
     return await resolve (event)
   }
+
+  const trackers: Handle=async ({event, resolve}) => {
+    return await resolve (event)
+  }
+
+  export const handle = sequence(clientHandler, trackers);
   `,
-];
+  import: `
+  import {client} from "$lib/server/auth"
+  `,
+};
