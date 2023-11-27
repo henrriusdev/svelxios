@@ -10,18 +10,15 @@ export const vscodeDebugConfig = {
 };
 
 export const clientCode = {
-  url: `import {baseUrl} from "$env/static/private`,
+  url: `
+  import {baseUrl} from "$env/static/private"
+  import type {RequestEvent} from "@sveltejs/kit"
+  import {debugger} from "$lib/utils/debugger"
+  `,
   client: `
     export const client = async (event: RequestEvent, endpoint: string, method: string, raw?: object, headers?: any, debug?: boolean) => {
 
-  const access_token = await getAccessToken(event)
-
     let body = raw? JSON.stringify(raw):null
-
-  headers = headers ?? {
-    "Accept": "*/*",
-    "Authorization": access_token
-  }
 
   let res = await fetch(baseUrl + endpoint, { method, body, headers })
 
@@ -62,7 +59,7 @@ export const debuggerCode = `
           data= await res.json().then(r=>r).catch(e=>"NO RES DATA")
         
           console.log(color,method+": "+endpoint +" " +res.status, "\\n",
-            {HEADER:headers
+            {HEADER:headers,
             PAYLOAD:payload,
             RESPONSE:{response:res, data},
             })
@@ -131,5 +128,8 @@ export const hooksCode = {
   `,
   import: `
   import {client} from "$lib/server/auth"
+  import type {Handle} from "@sveltejs/kit"
+
+  const debug=env.debug=="debug"
   `,
 };
