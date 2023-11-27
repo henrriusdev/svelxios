@@ -68,7 +68,7 @@ export const debugger = async (
         .then((r) => r)
         .catch((e) => "NO RES DATA");
 
-      console.log(color, method + ": " + endpoint + " " + res.status, "\n", {
+      console.log(color, method + ": " + endpoint + " " + res.status, "\\n", {
         HEADER: headers,
         PAYLOAD: payload,
         RESPONSE: { response: res, data },
@@ -80,7 +80,7 @@ export const debugger = async (
           .then((r) => r)
           .catch((e) => "NO RES DATA");
 
-        console.log(color, method + ": " + endpoint + " " + res.status, "\n", {
+        console.log(color, method + ": " + endpoint + " " + res.status, "\\n", {
           HEADER: headers,
           PAYLOAD: payload,
           RESPONSE: { status: res.status, response: res, data },
