@@ -41,6 +41,16 @@ export function checkOrCreateFile(
     }
 
     fileContent = fs.readFileSync(filePath, "utf8").split("\n");
+
+     if (searchPattern === "none") {
+       const contentArray =
+         typeof contentToAdd === "string" ? [contentToAdd] : contentToAdd;
+       fileContent.push(...contentArray);
+       fs.writeFileSync(filePath, fileContent.join("\n"));
+       console.log(`✅ ${filePath} modificado al final del archivo.`);
+       return;
+    }
+    
     const searchIndex = fileContent.findIndex((line) =>
       line.includes(searchPattern)
     );
