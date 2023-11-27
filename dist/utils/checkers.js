@@ -9,6 +9,6 @@ function isSvelteKit() {
     if (!fs_1.default.existsSync('package.json'))
         return false;
     const packageJson = JSON.parse(fs_1.default.readFileSync('package.json', 'utf8'));
-    return packageJson.dependencies && packageJson.dependencies['@sveltejs/kit'];
+    return packageJson.devDependencies && packageJson.devDependencies['@sveltejs/kit'];
 }
 exports.isSvelteKit = isSvelteKit;
