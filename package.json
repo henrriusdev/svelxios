@@ -1,11 +1,26 @@
 {
-  "name": "svex",
-  "version": "0.3.1",
-  "description": "Svelte Axios Request Handler",
-  "main": "index.js",
-  "bin": "svex.ts",
-  "repository": "https://github.com/hbourgeot/svex",
+  "name": "svelxios",
+  "version": "0.4.0",
+  "description": "Svelte Request Handler like Axios",
+  "main": "dist/index.js",
+  "bin": {
+    "svelxios": "dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hbourgeot/svex.git"
+  },
   "author": "Henrry Bourgeot",
+  "keywords": [
+    "sveltekit",
+    "svelte",
+    "axios",
+    "http",
+    "request",
+    "handlers",
+    "api"
+  ],
+  "preferGlobal": true,
   "contributors": [
     {
       "name": "Henrry Bourgeot"
@@ -29,5 +44,9 @@
   "dependencies": {
     "commander": "^11.1.0",
     "ts-node": "^10.9.1"
+  },
+  "peerDependencies": {
+    "@sveltejs/kit": "^1.0.0",
+    "svelte": "^4.0.0"
   }
 }
