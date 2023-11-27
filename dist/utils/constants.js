@@ -25,7 +25,7 @@ exports.clientCode = {
   let res = await fetch(baseUrl + endpoint, { method, body, headers })
 
   if (debug) {
-    await debbugerInstance("CLIENT", raw, res, endpoint, headers, method)
+    await debuggerInstance("CLIENT", raw, res, endpoint, headers, method)
   }
 
   if (res.ok) {
