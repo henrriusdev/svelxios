@@ -113,7 +113,7 @@ interface Client {
 export const hooksCode = {
   handlers: `
 const clientHandler: Handle=async ({event, resolve}) => {
-  event.locals.client={
+  event.locals.svelxios={
     "GET":async(endpoint:string,body?:object, headers?:any)=>await client(event,endpoint,"GET",body,headers,debug),
     "POST":async(endpoint:string,body?:object, headers?:any)=>await client(event,endpoint,"POST",body,headers,debug),
     "PUT":async (endpoint:string,body?:object, headers?:any)=>await client(event,endpoint,"PUT",body,headers,debug),

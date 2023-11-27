@@ -14,7 +14,7 @@ export const runCommand = () => {
     checkOrCreateFile('./src/app.d.ts', appLocalsCode.inLocals, 'interface Locals');
     checkOrCreateFile('./src/app.d.ts', appLocalsCode.interfaces, 'export ', 'above');
     checkOrCreateFile('./src/lib/server/auth.ts', clientCode.url, 'export', 'above');
-    checkOrCreateFile('./src/lib/server/auth.ts', clientCode.client, 'baseUrl');
+    checkOrCreateFile('./src/lib/server/auth.ts', clientCode.client, 'debugger');
     checkOrCreateFile('./src/lib/utils/debugger.ts', debuggerCode, 'none');
     checkOrCreateFile('./src/hooks.server.ts', hooksCode.import, 'import');
     checkOrCreateFile('./src/hooks.server.ts', hooksCode.handlers, 'none');

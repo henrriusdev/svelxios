@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { program } from "commander";
-import { runCommand } from "./commands/svex";
+import { runCommand } from "./commands/svelxios";
 
 program
   .description(
