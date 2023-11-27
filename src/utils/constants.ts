@@ -88,7 +88,11 @@ export const debuggerCode = `
   `;
 
 export const appLocalsCode = {
-  inLocals: `svelxios: Client`,
+  inLocals: `
+  interface Locals {
+    svelxios: Client
+  }
+  `,
   interfaces: `
   interface Response {
     ok: boolean;
