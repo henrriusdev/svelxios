@@ -4,8 +4,7 @@ import { vscodeDebugConfig } from "./constants"
 
 export function writeDebugConfig() {
   try {
-    // Crear las carpetas si no existen
-    const directory = path.dirname('.vscode');
+    const directory = path.join(".", ".vscode"); // Ruta correcta a .vscode
     if (!fs.existsSync(directory)) {
       fs.mkdirSync(directory, { recursive: true });
       console.log(`Creando directorio ${directory}`);
@@ -13,13 +12,15 @@ export function writeDebugConfig() {
 
     console.log("Writing VSCode debugger config");
     fs.writeFileSync(
-      ".vscode/launch.json",
+      path.join(directory, "launch.json"), // Usar path.join para la ruta del archivo
       JSON.stringify(vscodeDebugConfig, null, 4)
     );
-    console.log("✅ VSCode debugger config writed!");
+    console.log("✅ VSCode debugger config written!");
   } catch (e) {
-    console.error(`⚠ Error ocurred! Please open a issue at: https://github.com/hbourgeot/svex`);
-    console.error('Error details: ', e)
+    console.error(
+      `⚠ Error occurred! Please open an issue at: https://github.com/hbourgeot/svex`
+    );
+    console.error("Error details: ", e);
   }
 }
 
