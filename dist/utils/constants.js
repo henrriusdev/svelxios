@@ -15,7 +15,7 @@ exports.clientCode = {
     url: `
   import {baseUrl} from "$env/static/private"
   import type {RequestEvent} from "@sveltejs/kit"
-  import {debugger} from "$lib/utils/debugger"
+  import {debuggerInstance} from "$lib/utils/debugger"
   `,
     client: `
     export const client = async (event: RequestEvent, endpoint: string, method: string, raw?: object, headers?: any, debug?: boolean) => {
@@ -25,7 +25,7 @@ exports.clientCode = {
   let res = await fetch(baseUrl + endpoint, { method, body, headers })
 
   if (debug) {
-    await debbuger("CLIENT", raw, res, endpoint, headers, method)
+    await debbugerInstance("CLIENT", raw, res, endpoint, headers, method)
   }
 
   if (res.ok) {
@@ -50,7 +50,7 @@ exports.clientCode = {
   `,
 };
 exports.debuggerCode = `
-export const debugger = async (
+export const debuggerInstance = async (
   name: string,
   payload: any,
   response: Response,
