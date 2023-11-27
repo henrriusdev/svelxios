@@ -94,46 +94,48 @@ export const appLocalsCode = {
   }
   `,
   interfaces: `
-  interface Response {
-    ok: boolean;
-    status: number;
-    data: any;
-  }
+interface Response {
+  ok: boolean;
+  status: number;
+  data: any;
+}
 
-  interface Client {
-    GET: (endpoint: string, body?: object, params?: object, headers?: any) => Promise<Response>;
-    POST: (endpoint: string, body?: object, params?: object, headers?: any) => Promise<Response>;
-    PUT: (endpoint: string, body?: object, params?: object, headers?: any) => Promise<Response>;
-    PATCH: (endpoint: string, body?: object, params?: object, headers?: any) => Promise<Response>;
-    DELETE: (endpoint: string, body?: object, params?: object, headers?: any) => Promise<Response>;
-  }
+interface Client {
+  GET: (endpoint: string, body?: object, params?: object, headers?: any) => Promise<Response>;
+  POST: (endpoint: string, body?: object, params?: object, headers?: any) => Promise<Response>;
+  PUT: (endpoint: string, body?: object, params?: object, headers?: any) => Promise<Response>;
+  PATCH: (endpoint: string, body?: object, params?: object, headers?: any) => Promise<Response>;
+  DELETE: (endpoint: string, body?: object, params?: object, headers?: any) => Promise<Response>;
+}
   `,
 };
 
 export const hooksCode = {
   handlers: `
-  const clientHandler: Handle=async ({event, resolve}) => {
-    event.locals.client={
-      "GET":async(endpoint:string,body?:object, headers?:any)=>await client(event,endpoint,"GET",body,headers,debug),
-      "POST":async(endpoint:string,body?:object, headers?:any)=>await client(event,endpoint,"POST",body,headers,debug),
-      "PUT":async (endpoint:string,body?:object, headers?:any)=>await client(event,endpoint,"PUT",body,headers,debug),
-      "PATCH":async (endpoint:string,body?:object, headers?:any)=> await client(event,endpoint,"PATCH",body,headers,debug),
-      "DELETE":async (endpoint:string,body?:object, headers?:any)=> await client(event,endpoint,"DELETE",body,headers,debug)
-    }
-
-    return await resolve (event)
+const clientHandler: Handle=async ({event, resolve}) => {
+  event.locals.client={
+    "GET":async(endpoint:string,body?:object, headers?:any)=>await client(event,endpoint,"GET",body,headers,debug),
+    "POST":async(endpoint:string,body?:object, headers?:any)=>await client(event,endpoint,"POST",body,headers,debug),
+    "PUT":async (endpoint:string,body?:object, headers?:any)=>await client(event,endpoint,"PUT",body,headers,debug),
+    "PATCH":async (endpoint:string,body?:object, headers?:any)=> await client(event,endpoint,"PATCH",body,headers,debug),
+    "DELETE":async (endpoint:string,body?:object, headers?:any)=> await client(event,endpoint,"DELETE",body,headers,debug)
   }
 
-  const trackers: Handle=async ({event, resolve}) => {
-    return await resolve (event)
-  }
+  return await resolve (event)
+}
 
-  export const handle = sequence(clientHandler, trackers);
+const trackers: Handle=async ({event, resolve}) => {
+  return await resolve (event)
+}
+
+export const handle = sequence(clientHandler, trackers);
   `,
   import: `
-  import {client} from "$lib/server/auth"
-  import type {Handle} from "@sveltejs/kit"
+import { env } from "$env/dynamic/private";
+import { client } from "$lib/server/auth";
+import type { Handle } from "@sveltejs/kit";
+import { sequence } from "@sveltejs/kit/hooks";
 
-  const debug=env.debug=="debug"
+const debug=env.debug=="debug"
   `,
 };
