@@ -18,10 +18,6 @@ import type {RequestEvent} from "@sveltejs/kit"
 import {debuggerInstance} from "$lib/utils/debugger"
   `,
     client: `
-import { baseUrl } from "$env/static/private";
-import type { RequestEvent } from "@sveltejs/kit";
-import { debuggerInstance } from "$lib/utils/debugger";
-
 export const client = async (
   event: RequestEvent,
   endpoint: string,
