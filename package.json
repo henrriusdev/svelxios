@@ -1,6 +1,6 @@
 {
   "name": "svex",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Svelte Axios Request Handler",
   "main": "index.js",
   "bin": "svex.ts",
