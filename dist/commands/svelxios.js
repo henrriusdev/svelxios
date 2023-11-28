@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.runCommand = void 0;
 const utils_1 = require("../utils");
+const installers_1 = require("../utils/installers");
 const runCommand = () => {
     // Aquí va la lógica de tu comando
     // Por ejemplo, llamar a checkOrCreateFile con los parámetros necesarios
@@ -10,6 +11,7 @@ const runCommand = () => {
             console.error('⚠ This doesn\'t appears to be a SvelteKit Project, aborting.');
             return;
         }
+        (0, installers_1.runInstall)();
         (0, utils_1.writeDebugConfig)();
         (0, utils_1.checkOrCreateFile)('./src/app.d.ts', utils_1.appLocalsCode.inLocals, 'interface Locals');
         (0, utils_1.checkOrCreateFile)('./src/app.d.ts', utils_1.appLocalsCode.imports, 'declare global', 'above');

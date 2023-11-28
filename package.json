@@ -1,7 +1,7 @@
 {
   "name": "svelxios",
   "version": "2.0.1",
-  "description": "Svelte Request Handler wrapping Axios",
+  "description": "SvelteKit Axios Wrapper",
   "main": "dist/index.js",
   "bin": {
     "svelxios": "dist/index.js"
@@ -15,6 +15,9 @@
     "sveltekit",
     "svelte",
     "axios",
+    "wrapper",
+    "http client",
+    "client",
     "http",
     "request",
     "handlers",

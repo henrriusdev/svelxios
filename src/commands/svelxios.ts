@@ -1,4 +1,5 @@
 import { appLocalsCode, checkOrCreateFile, clientCode, debuggerCode, hooksCode, isSvelteKit, writeDebugConfig } from "../utils";
+import { runInstall } from "../utils/installers";
 
 export const runCommand = () => {
   // Aquí va la lógica de tu comando
@@ -9,8 +10,8 @@ export const runCommand = () => {
       return;
     }
 
+    runInstall();
     writeDebugConfig();
-
     checkOrCreateFile('./src/app.d.ts', appLocalsCode.inLocals, 'interface Locals');
     checkOrCreateFile('./src/app.d.ts', appLocalsCode.imports, 'declare global', 'above');
     checkOrCreateFile('./src/lib/server/client.ts', clientCode.url, 'export', 'above');
