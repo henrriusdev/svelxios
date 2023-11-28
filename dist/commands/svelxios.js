@@ -12,9 +12,9 @@ const runCommand = () => {
         }
         (0, utils_1.writeDebugConfig)();
         (0, utils_1.checkOrCreateFile)('./src/app.d.ts', utils_1.appLocalsCode.inLocals, 'interface Locals');
-        (0, utils_1.checkOrCreateFile)('./src/app.d.ts', utils_1.appLocalsCode.interfaces, 'export ', 'above');
-        (0, utils_1.checkOrCreateFile)('./src/lib/server/auth.ts', utils_1.clientCode.url, 'export', 'above');
-        (0, utils_1.checkOrCreateFile)('./src/lib/server/auth.ts', utils_1.clientCode.client, 'debugger');
+        (0, utils_1.checkOrCreateFile)('./src/app.d.ts', utils_1.appLocalsCode.imports, 'declare global', 'above');
+        (0, utils_1.checkOrCreateFile)('./src/lib/server/client.ts', utils_1.clientCode.url, 'export', 'above');
+        (0, utils_1.checkOrCreateFile)('./src/lib/server/client.ts', utils_1.clientCode.client, 'debugger');
         (0, utils_1.checkOrCreateFile)('./src/lib/utils/debugger.ts', utils_1.debuggerCode, 'none');
         (0, utils_1.checkOrCreateFile)('./src/hooks.server.ts', utils_1.hooksCode.import, 'import');
         (0, utils_1.checkOrCreateFile)('./src/hooks.server.ts', utils_1.hooksCode.handlers, 'none');

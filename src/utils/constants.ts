@@ -12,134 +12,110 @@ export const vscodeDebugConfig = {
 export const clientCode = {
   url: `
 import {baseUrl} from "$env/static/private"
-import type {RequestEvent} from "@sveltejs/kit"
-import {debuggerInstance} from "$lib/utils/debugger"
+import axios from "axios"
+import {debugResponse, debugRequest} from "$lib/utils/debugger"
   `,
   client: `
-export const client = async (
-  event: RequestEvent,
-  endpoint: string,
-  method: string,
-  raw?: object,
-  headers?: any,
-  debug?: boolean
-) => {
-  let body = raw ? JSON.stringify(raw) : null;
+const client = axios.create({
+  baseURL: baseUrl,
+});
 
-  let res = await fetch(baseUrl + endpoint, { method, body, headers });
-
-  if (debug) {
-    await debuggerInstance("CLIENT", raw, res, endpoint, headers, method);
+client.interceptors.response.use(
+  (response) => {
+    debugResponse(response);
+    return response;
+  },
+  (error) => {
+    debugResponse(error.response, error);
+    return Promise.reject(error);
   }
+);
 
-  if (res.ok) {
-    let data = await res.json();
-    return { ok: true, status: res.status, data };
-  } else {
-    let data;
-    try {
-      data = await res.json();
-    } catch (error) {
-      data = undefined;
-    }
-    return {
-      ok: false,
-      status: res.status,
-      data: JSON.stringify(data),
-    };
+client.interceptors.request.use(
+  (config) => {
+    debugRequest(config);
+    return config;
+  },
+  (error) => {
+    debugRequest(error.config);
+    return Promise.reject(error);
   }
-};`,
+)
+
+export {client}`,
 };
 
 export const debuggerCode = `
-export const debuggerInstance = async (
-  name: string,
-  payload: any,
-  response: Response,
-  endpoint?: string,
-  headers?: any,
-  method?: string
+import type {AxiosError, AxiosRequestConfig, AxiosResponse} from "axios";
+
+let httpMethod = "";
+let endpnt = "";
+
+export const debugResponse = async (
+  response: AxiosResponse<any> | null,
+  error: AxiosError<any> | null = null
 ) => {
   try {
-    let res = response.clone();
-    let color = res.ok ? "[1;32m" : "[1;31m";
-    let data = "NO RES DATA";
+    // Determina si es una respuesta exitosa o un error
+    const method =
+      (response ? response.config.method : error?.config?.method) || "UNKNOWN";
+    const endpoint =
+      (response ? response.config.url : error?.config?.url) || "UNKNOWN";
 
-    try {
-      data = await res
-        .json()
-        .then((r) => r)
-        .catch((e) => "NO RES DATA");
+    httpMethod = method;
+    endpnt = endpoint;
+    const isSuccess =
+      response && response.status >= 200 && response.status < 300;
+    const color = isSuccess ? "[1;32m" : "[1;31m";
 
-      console.log(color, method + ": " + endpoint + " " + res.status, "\\n", {
-        HEADER: headers,
-        PAYLOAD: payload,
-        RESPONSE: { response: res, data },
-      });
-    } catch {
-      try {
-        data = await res
-          .text()
-          .then((r) => r)
-          .catch((e) => "NO RES DATA");
+    const headers = response ? response.config.headers : error?.config?.headers;
 
-        console.log(color, method + ": " + endpoint + " " + res.status, "\\n", {
-          HEADER: headers,
-          PAYLOAD: payload,
-          RESPONSE: { status: res.status, response: res, data },
-        });
-      } catch (e) {
-        console.log("ha ocurrido un error con debugger");
-        console.error(method + ": " + endpoint + " ", {
-          error: e,
-          response,
-          status: response.status,
-        });
-      }
-    }
+    // Datos de la respuesta o error
+    let data = isSuccess
+      ? response?.data
+      : error?.response?.data || "NO RES DATA";
+
+    console.log(color, \`\${method}: \${endpoint} \${response?.status}\`, "\\n", {
+      HEADER: headers,
+      RESPONSE: { status: response?.status, data },
+    });
   } catch (e) {
     console.log("ha ocurrido un error con debugger");
-    console.error(method + ": " + endpoint + " ", {
+    console.error(\`\${httpMethod}: \${endpnt}\`, {
       error: e,
       response,
-      status: response.status,
+      status: response?.status,
     });
   }
-};`;
+};
+
+export const debugRequest = (config: AxiosRequestConfig) => {
+  const color = "[1;32m";
+  console.log(
+    color,
+    \`Request \${config.method} \${config.url}\\nHeaders: \${config.headers}\\n\${
+      config.data ? "Payload: " + config.data : ""
+    }\`
+  );
+  return config;
+};
+`;
 
 export const appLocalsCode = {
+  imports: `
+import { AxiosInstance } from "axios";
+  `,
   inLocals: `
     interface Locals {
-      svelxios: Client
+      svelxios: AxiosInstance;
     }
-  `,
-  interfaces: `
-interface Response {
-  ok: boolean;
-  status: number;
-  data: any;
-}
-
-interface Client {
-  GET: (endpoint: string, body?: object, headers?: any) => Promise<Response>;
-  POST: (endpoint: string, body?: object, headers?: any) => Promise<Response>;
-  PUT: (endpoint: string, body?: object, headers?: any) => Promise<Response>;
-  PATCH: (endpoint: string, body?: object, headers?: any) => Promise<Response>;
-  DELETE: (endpoint: string, body?: object, headers?: any) => Promise<Response>;
-}
-  `,
+  `
 };
 
 export const hooksCode = {
   handlers: `
 const clientHandler: Handle=async ({event, resolve}) => {
-  event.locals.svelxios={
-    "GET":async(endpoint:string,body?:object, headers?:any)=>await client(event,endpoint,"GET",body,headers,debug),
-    "POST":async(endpoint:string,body?:object, headers?:any)=>await client(event,endpoint,"POST",body,headers,debug),
-    "PUT":async (endpoint:string,body?:object, headers?:any)=>await client(event,endpoint,"PUT",body,headers,debug),
-    "PATCH":async (endpoint:string,body?:object, headers?:any)=> await client(event,endpoint,"PATCH",body,headers,debug),
-    "DELETE":async (endpoint:string,body?:object, headers?:any)=> await client(event,endpoint,"DELETE",body,headers,debug)
-  }
+  event.locals.svelxios = client;
 
   return await resolve (event)
 }
@@ -151,11 +127,8 @@ const trackers: Handle=async ({event, resolve}) => {
 export const handle = sequence(clientHandler, trackers);
   `,
   import: `
-import { env } from "$env/dynamic/private";
-import { client } from "$lib/server/auth";
+import { client } from "$lib/server/client";
 import type { Handle } from "@sveltejs/kit";
 import { sequence } from "@sveltejs/kit/hooks";
-
-const debug=env.debug=="debug"
   `,
 };

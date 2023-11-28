@@ -12,9 +12,9 @@ export const runCommand = () => {
     writeDebugConfig();
 
     checkOrCreateFile('./src/app.d.ts', appLocalsCode.inLocals, 'interface Locals');
-    checkOrCreateFile('./src/app.d.ts', appLocalsCode.interfaces, 'export ', 'above');
-    checkOrCreateFile('./src/lib/server/auth.ts', clientCode.url, 'export', 'above');
-    checkOrCreateFile('./src/lib/server/auth.ts', clientCode.client, 'debugger');
+    checkOrCreateFile('./src/app.d.ts', appLocalsCode.imports, 'declare global', 'above');
+    checkOrCreateFile('./src/lib/server/client.ts', clientCode.url, 'export', 'above');
+    checkOrCreateFile('./src/lib/server/client.ts', clientCode.client, 'debugger');
     checkOrCreateFile('./src/lib/utils/debugger.ts', debuggerCode, 'none');
     checkOrCreateFile('./src/hooks.server.ts', hooksCode.import, 'import');
     checkOrCreateFile('./src/hooks.server.ts', hooksCode.handlers, 'none');
