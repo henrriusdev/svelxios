@@ -1,7 +1,7 @@
 {
   "name": "svelxios",
   "version": "2.0.0",
-  "description": "Svelte Request Handler like Axios",
+  "description": "Svelte Request Handler wrapping Axios",
   "main": "dist/index.js",
   "bin": {
     "svelxios": "dist/index.js"
